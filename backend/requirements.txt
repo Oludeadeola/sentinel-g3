@@ -9,4 +9,5 @@ playwright
 python-dotenv
 google-generativeai
 Pillow
+python-dotenv
 

@@ -183,8 +183,12 @@ export const CodeEditorPreview = () => {
                                 theme="vs-dark"
                                 value={editorCode}
                                 onMount={(editor, monaco) => {
-                                    // Disable validation noise (Red lines)
+                                    // Disable validation noise (Red lines) for TS and JS
                                     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+                                        noSemanticValidation: true,
+                                        noSyntaxValidation: true
+                                    });
+                                    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
                                         noSemanticValidation: true,
                                         noSyntaxValidation: true
                                     });

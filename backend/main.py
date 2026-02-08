@@ -29,7 +29,7 @@ app = FastAPI(title="Sentinel-G3 API", version="1.0.0")
 # Allow CORS for Next.js frontend (production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*", "https://sentinel-g3-aep9.vercel.app"], # Allow all + specific Vercel app
+    allow_origins=["*", "https://sentinel-g3-aep9.vercel.app", "http://localhost:3000"], # Allow all + specific Vercel app
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
