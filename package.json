@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "dev:full": "concurrently \"next dev\" \"cd backend && python main.py\"",
-    "build": "next build",
-    "start": "next start",
+    "dev": "node init && next dev",
+    "dev:full": "node init && concurrently \"next dev\" \"cd backend && python main.py\"",
+    "build": "node init && next build",
+    "start": "node init && next start",
     "lint": "eslint"
   },
   "dependencies": {
