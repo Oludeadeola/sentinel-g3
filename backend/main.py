@@ -357,17 +357,17 @@ async def save_file(request: FileSaveRequest):
         with open(target_path, "w", encoding="utf-8") as f:
             f.write(request.content)
             
-        # Auto-Push Logic (The "Push" Part)
-        try:
-            import subprocess
-            subprocess.run(["git", "add", "."], check=True)
-            subprocess.run(["git", "commit", "-m", f"fix(sentinel): auto-save {os.path.basename(target_path)}"], check=True)
-            # Push to origin (assuming remote is configured)
-            subprocess.run(["git", "push", "origin", "main"], check=True) 
-        except Exception as push_err:
-             print(f"Auto-push warning: {push_err}")
+        # Review-Only Mode: No Auto-Push
+        # try:
+        #     import subprocess
+        #     subprocess.run(["git", "add", "."], check=True)
+        #     subprocess.run(["git", "commit", "-m", f"fix(sentinel): auto-save {os.path.basename(target_path)}"], check=True)
+        #     # Push to origin (assuming remote is configured)
+        #     subprocess.run(["git", "push", "origin", "main"], check=True) 
+        # except Exception as push_err:
+        #      print(f"Auto-push warning: {push_err}")
 
-        return {"status": "success", "message": f"File saved to {target_path} and pushed to cloud."}
+        return {"status": "success", "message": f"File saved locally to {target_path}. (Git Push Disabled)"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

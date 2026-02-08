@@ -154,7 +154,7 @@ export const CodeEditorPreview = () => {
                                         Saving...
                                     </>
                                 ) : (
-                                    "Save & Push"
+                                    "Save Locally"
                                 )}
                             </button>
                         </div>

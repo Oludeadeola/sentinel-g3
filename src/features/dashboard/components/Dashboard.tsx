@@ -56,24 +56,12 @@ export const Dashboard: React.FC = () => {
             if (data.fixedCode) {
                 setEditorCode(data.fixedCode);
 
-                // AUTO-SAVE TRIGGER (The "Push" Part)
-                try {
-                    await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/save-file`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            path: `src/app/DemoPage.tsx`, // In a real app this would be dynamic
-                            content: data.fixedCode
-                        })
-                    });
-                    addLog(screenshot ? "Visual repair complete. Auto-saved to disk." : "AI: Code optimization applied & Saved.");
-                } catch (saveErr) {
-                    console.error("Auto-save failed", saveErr);
-                    addLog("Visual repair complete. Warning: Auto-save failed.");
-                }
+                // REVIEW-ONLY MODE: No Auto-Save
+                // The user must manually review and click "Save" in the editor
+                // setEditorCode updates the Monaco Editor immediately
 
                 setAgentStatus('SUCCESS');
-                addLog("Neural Patch Complete.");
+                addLog("Neural Patch Generated. Ready for Review.");
             } else {
                 setAgentStatus('IDLE');
                 addLog("AI: No critical issues found.");
