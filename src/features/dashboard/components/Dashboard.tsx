@@ -40,6 +40,8 @@ export const Dashboard: React.FC = () => {
 
         try {
             const baseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+            addLog(`🔗 Connecting to header: ${baseUrl}...`); // Debug Log
+
             const res = await fetch(`${baseUrl}/api/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -50,17 +52,12 @@ export const Dashboard: React.FC = () => {
                 })
             });
 
-            if (!res.ok) throw new Error("AI Analysis failed");
+            if (!res.ok) throw new Error(`Server Error: ${res.status}`);
 
             const data = await res.json();
 
             if (data.fixedCode) {
                 setEditorCode(data.fixedCode);
-
-                // REVIEW-ONLY MODE: No Auto-Save
-                // The user must manually review and click "Save" in the editor
-                // setEditorCode updates the Monaco Editor immediately
-
                 setAgentStatus('SUCCESS');
                 addLog("Neural Patch Generated. Ready for Review.");
             } else {
@@ -68,10 +65,11 @@ export const Dashboard: React.FC = () => {
                 addLog("AI: No critical issues found.");
             }
 
-        } catch (e) {
+        } catch (e: any) {
             console.error("AI Analysis failed", e);
             setAgentStatus('ERROR');
-            addLog("Error: Neural Link Interrupted.");
+            addLog(`❌ Error: ${e.message}`); // Show actual error
+            addLog("Tip: Check Vercel Env Vars & Render Status.");
         } finally {
             setTimeout(() => setIsScanning(false), 800);
         }
