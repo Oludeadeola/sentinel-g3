@@ -39,7 +39,7 @@ export const Dashboard: React.FC = () => {
         addLog(screenshot ? "ANALYZING PIXELS..." : "Initiating Gemini Neural Analysis...");
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/analyze`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -55,8 +55,24 @@ export const Dashboard: React.FC = () => {
 
             if (data.fixedCode) {
                 setEditorCode(data.fixedCode);
+
+                // AUTO-SAVE TRIGGER (The "Push" Part)
+                try {
+                    await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/save-file`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            path: `src/app/DemoPage.tsx`, // In a real app this would be dynamic
+                            content: data.fixedCode
+                        })
+                    });
+                    addLog(screenshot ? "Visual repair complete. Auto-saved to disk." : "AI: Code optimization applied & Saved.");
+                } catch (saveErr) {
+                    console.error("Auto-save failed", saveErr);
+                    addLog("Visual repair complete. Warning: Auto-save failed.");
+                }
+
                 setAgentStatus('SUCCESS');
-                addLog(screenshot ? "Visual repair complete. CSS alignment synced." : "AI: Code optimization applied.");
                 addLog("Neural Patch Complete.");
             } else {
                 setAgentStatus('IDLE');

@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTypewriter } from '@/hooks/useTypewriter';
 import { useAppStore } from '@/store/useAppStore';
 import { useState, useEffect } from 'react';
+import { detectLanguage } from '@/lib/languageDetector';
+
 
 export const CodeEditorPreview = () => {
     const {
@@ -52,20 +54,19 @@ export const CodeEditorPreview = () => {
 
     useEffect(() => {
         const lowerCode = editorCode.toLowerCase();
+        const { language, extension, icon } = detectLanguage(editorCode);
 
-        let newName = "DemoPage.tsx";
-        let newIcon = "⚛";
-
-        if (lowerCode.includes("def ") || lowerCode.includes("import numpy") || lowerCode.includes("print(")) {
-            newName = "script.py";
-            newIcon = "🐍";
-        } else if (lowerCode.includes("class ") && lowerCode.includes("public static void")) {
-            newName = "Main.java";
-            newIcon = "☕";
-        } else if (lowerCode.includes("select * from") || lowerCode.includes("insert into")) {
-            newName = "query.sql";
-            newIcon = "🐘";
+        let newName = `file.${extension}`;
+        // If we have a known context name, prefere that, otherwise use generic
+        if (fileName !== "DemoPage.tsx" && !fileName.endsWith(extension)) {
+            newName = fileName.split('.')[0] + "." + extension;
+        } else if (fileName === "DemoPage.tsx" && extension !== 'tsx') {
+            newName = `script.${extension}`;
+        } else {
+            newName = fileName;
         }
+
+        let newIcon = icon;
 
         if (newName !== fileName) {
             setFileName(newName);
@@ -81,7 +82,7 @@ export const CodeEditorPreview = () => {
         addLog("Compiling changes...");
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/save-file`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/save-file`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

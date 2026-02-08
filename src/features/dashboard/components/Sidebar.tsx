@@ -23,7 +23,7 @@ export const Sidebar = () => {
         addLog(`Instruction: "${globalInstruction}"`);
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/fix-project`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/fix-project`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -75,7 +75,7 @@ export const Sidebar = () => {
             await new Promise(resolve => setTimeout(resolve, 600)); // Dramatic pause
             addLog("Executing recursive walk...");
 
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/project/scan`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/project/scan`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ path: '.' })
