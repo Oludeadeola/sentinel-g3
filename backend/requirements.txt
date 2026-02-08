@@ -6,4 +6,7 @@ starlette
 requests
 gitpython
 playwright
+python-dotenv
+google-generativeai
+Pillow
 
