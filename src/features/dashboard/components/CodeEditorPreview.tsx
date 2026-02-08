@@ -205,7 +205,9 @@ export const CodeEditorPreview = () => {
                                     wordWrap: 'on',
                                     scrollBeyondLastLine: false,
                                     automaticLayout: true,
-                                    padding: { top: 16, bottom: 16 }
+                                    padding: { top: 16, bottom: 16 },
+                                    // @ts-ignore - Custom option for user request
+                                    diagnostics: { noSemanticValidation: true, noSyntaxValidation: true }
                                 }}
                             />
                         </div>

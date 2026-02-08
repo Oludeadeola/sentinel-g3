@@ -39,7 +39,8 @@ export const Dashboard: React.FC = () => {
         addLog(screenshot ? "ANALYZING PIXELS..." : "Initiating Gemini Neural Analysis...");
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/analyze`, {
+            const baseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+            const res = await fetch(`${baseUrl}/api/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
