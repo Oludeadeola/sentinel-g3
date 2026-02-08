@@ -182,6 +182,13 @@ export const CodeEditorPreview = () => {
                                 language={fileLang}
                                 theme="vs-dark"
                                 value={editorCode}
+                                onMount={(editor, monaco) => {
+                                    // Disable validation noise (Red lines)
+                                    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+                                        noSemanticValidation: true,
+                                        noSyntaxValidation: true
+                                    });
+                                }}
                                 onChange={(value) => {
                                     setEditorCode(value || "");
                                     setCurrentCode(value || "");
@@ -189,6 +196,11 @@ export const CodeEditorPreview = () => {
                                 options={{
                                     readOnly: false,
                                     minimap: { enabled: false },
+                                    lineNumbers: 'on',
+                                    glyphMargin: false,
+                                    folding: false,
+                                    lineDecorationsWidth: 0,
+                                    lineNumbersMinChars: 0,
                                     fontSize: 14,
                                     wordWrap: 'on',
                                     scrollBeyondLastLine: false,
